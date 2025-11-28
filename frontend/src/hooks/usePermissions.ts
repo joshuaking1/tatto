@@ -34,6 +34,17 @@ const PERMISSION_MAP: ResourcePermissionMap = {
     'expense:create': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
     'expense:edit': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
     'expense:delete': [UserRole.SUPER_ADMIN, UserRole.ADMIN],
+    'attendance:view': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER, UserRole.ARTIST, UserRole.RECEPTIONIST],
+    'attendance:create': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER, UserRole.ARTIST, UserRole.RECEPTIONIST],
+    'attendance:edit': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'attendance:delete': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'attendance:reports': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'attendance:settings': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'leave:view': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER, UserRole.ARTIST, UserRole.RECEPTIONIST],
+    'leave:create': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER, UserRole.ARTIST, UserRole.RECEPTIONIST],
+    'leave:edit': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'leave:delete': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'leave:approve': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
 };
 
 export function usePermissions() {

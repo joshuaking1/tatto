@@ -1,6 +1,6 @@
 // src/components/layout/Sidebar.tsx
 import { Link, useLocation } from "react-router-dom";
-import { Calendar, Home, Users, UserCircle, Scissors, CalendarClock, Package, ShoppingCart, Receipt, Building2, Wallet, TrendingUp, CreditCard, FileBarChart, ChevronDown, Tags } from "lucide-react";
+import { Calendar, Home, Users, UserCircle, Scissors, CalendarClock, Package, ShoppingCart, Receipt, Building2, Wallet, TrendingUp, CreditCard, FileBarChart, ChevronDown, Tags, Clock, FileText, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePermissions } from "@/hooks/usePermissions";
 import { UserRole } from "@/types";
@@ -11,6 +11,8 @@ export function Sidebar() {
   const { hasAnyRole, canAccessResource } = usePermissions();
   const [expensesExpanded, setExpensesExpanded] = useState(false);
   const [inventoryExpanded, setInventoryExpanded] = useState(false);
+  const [attendanceExpanded, setAttendanceExpanded] = useState(false);
+  const [reportsExpanded, setReportsExpanded] = useState(false);
 
   const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
 
@@ -26,6 +28,10 @@ export function Sidebar() {
   const canViewCommissionRules = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN]);
   const canViewExpenses = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]);
   const canViewFinancialReports = canAccessResource('reports:view');
+  const canViewAttendance = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER, UserRole.ARTIST, UserRole.RECEPTIONIST]);
+  const canViewLeaveRequests = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER, UserRole.ARTIST, UserRole.RECEPTIONIST]);
+  const canViewAttendanceReports = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]);
+  const canManageAttendanceSettings = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]);
 
   return (
     <div className="hidden border-r bg-muted/40 md:block">
@@ -243,17 +249,61 @@ export function Sidebar() {
                 )}
               </div>
             )}
-            {canViewFinancialReports && (
-              <Link
-                to="/reports/financial"
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                  isActive('/reports/financial') && "bg-muted text-primary"
+            {(canViewFinancialReports || canViewAttendanceReports) && (
+              <div>
+                <button
+                  onClick={() => setReportsExpanded(!reportsExpanded)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",
+                    (isActive('/reports') || isActive('/reports/financial') || isActive('/attendance/reports')) && "bg-muted text-primary"
+                  )}
+                >
+                  <FileBarChart className="h-4 w-4" />
+                  Reports
+                  <ChevronDown className={cn(
+                    "h-4 w-4 ml-auto transition-transform",
+                    reportsExpanded && "rotate-180"
+                  )} />
+                </button>
+                {reportsExpanded && (
+                  <div className="ml-6 mt-1 space-y-1">
+                    <Link
+                      to="/reports"
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        isActive('/reports') && !isActive('/reports/financial') && !isActive('/attendance/reports') && "bg-muted text-primary"
+                      )}
+                    >
+                      <FileBarChart className="h-4 w-4" />
+                      All Reports
+                    </Link>
+                    {canViewFinancialReports && (
+                      <Link
+                        to="/reports/financial"
+                        className={cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                          isActive('/reports/financial') && "bg-muted text-primary"
+                        )}
+                      >
+                        <FileBarChart className="h-4 w-4" />
+                        Financial
+                      </Link>
+                    )}
+                    {canViewAttendanceReports && (
+                      <Link
+                        to="/attendance/reports"
+                        className={cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                          isActive('/attendance/reports') && "bg-muted text-primary"
+                        )}
+                      >
+                        <FileBarChart className="h-4 w-4" />
+                        Attendance
+                      </Link>
+                    )}
+                  </div>
                 )}
-              >
-                <FileBarChart className="h-4 w-4" />
-                Financial Reports
-              </Link>
+              </div>
             )}
             {canViewCommissionRules && (
               <Link
@@ -266,6 +316,74 @@ export function Sidebar() {
                 <TrendingUp className="h-4 w-4" />
                 Commission Rules
               </Link>
+            )}
+            {canViewAttendance && (
+              <div>
+                <button
+                  onClick={() => setAttendanceExpanded(!attendanceExpanded)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",
+                    (isActive('/attendance') || isActive('/leave-requests') || isActive('/attendance/settings') || isActive('/attendance/reports')) && "bg-muted text-primary"
+                  )}
+                >
+                  <Clock className="h-4 w-4" />
+                  Attendance
+                  <ChevronDown className={cn(
+                    "h-4 w-4 ml-auto transition-transform",
+                    attendanceExpanded && "rotate-180"
+                  )} />
+                </button>
+                {attendanceExpanded && (
+                  <div className="ml-6 mt-1 space-y-1">
+                    <Link
+                      to="/attendance"
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        isActive('/attendance') && !isActive('/attendance/settings') && !isActive('/attendance/reports') && "bg-muted text-primary"
+                      )}
+                    >
+                      <Clock className="h-4 w-4" />
+                      Clock In/Out
+                    </Link>
+                    {canViewLeaveRequests && (
+                      <Link
+                        to="/leave-requests"
+                        className={cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                          isActive('/leave-requests') && "bg-muted text-primary"
+                        )}
+                      >
+                        <FileText className="h-4 w-4" />
+                        Leave Requests
+                      </Link>
+                    )}
+                    {canViewAttendanceReports && (
+                      <Link
+                        to="/attendance/reports"
+                        className={cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                          isActive('/attendance/reports') && "bg-muted text-primary"
+                        )}
+                      >
+                        <FileBarChart className="h-4 w-4" />
+                        Attendance Reports
+                      </Link>
+                    )}
+                    {canManageAttendanceSettings && (
+                      <Link
+                        to="/attendance/settings"
+                        className={cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                          isActive('/attendance/settings') && "bg-muted text-primary"
+                        )}
+                      >
+                        <Settings className="h-4 w-4" />
+                        Settings
+                      </Link>
+                    )}
+                  </div>
+                )}
+              </div>
             )}
           </nav>
         </div>

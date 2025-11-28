@@ -21,6 +21,11 @@ import { CommissionRulesPage } from './pages/CommissionRulesPage';
 import { ExpensesPage } from './pages/ExpensesPage';
 import { ExpenseCategoriesPage } from './pages/ExpenseCategoriesPage';
 import { FinancialReportsPage } from './pages/FinancialReportsPage';
+import { ReportsPage } from './pages/ReportsPage';
+import { AttendancePage } from './pages/AttendancePage';
+import { AttendanceReportsPage } from './pages/AttendanceReportsPage';
+import { LeaveRequestsPage } from './pages/LeaveRequestsPage';
+import { AttendanceSettingsPage } from './pages/AttendanceSettingsPage';
 import { RoleGuard } from '@/components/auth/RoleGuard';
 import { UserRole } from '@/types';
 import { Toaster } from '@/components/ui/sonner'; // Import the Toaster
@@ -110,6 +115,31 @@ function App() {
           <Route path="/reports/financial" element={
             <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]}>
               <FinancialReportsPage />
+            </RoleGuard>
+          } />
+          <Route path="/reports" element={
+            <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]}>
+              <ReportsPage />
+            </RoleGuard>
+          } />
+          <Route path="/attendance" element={
+            <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER, UserRole.ARTIST, UserRole.RECEPTIONIST]}>
+              <AttendancePage />
+            </RoleGuard>
+          } />
+          <Route path="/attendance/reports" element={
+            <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]}>
+              <AttendanceReportsPage />
+            </RoleGuard>
+          } />
+          <Route path="/leave-requests" element={
+            <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER, UserRole.ARTIST, UserRole.RECEPTIONIST]}>
+              <LeaveRequestsPage />
+            </RoleGuard>
+          } />
+          <Route path="/attendance/settings" element={
+            <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]}>
+              <AttendanceSettingsPage />
             </RoleGuard>
           } />
         </Route>

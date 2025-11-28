@@ -380,3 +380,253 @@ export interface Expense {
   branch?: Branch;
   recordedBy?: User;
 }
+
+// Attendance Management Types
+export enum AttendanceStatus {
+  CLOCKED_IN = 'CLOCKED_IN',
+  CLOCKED_OUT = 'CLOCKED_OUT',
+  INCOMPLETE = 'INCOMPLETE',
+}
+
+export enum BreakType {
+  LUNCH = 'LUNCH',
+  SHORT = 'SHORT',
+  PERSONAL = 'PERSONAL',
+}
+
+export enum LeaveType {
+  VACATION = 'VACATION',
+  SICK = 'SICK',
+  PERSONAL = 'PERSONAL',
+  UNPAID = 'UNPAID',
+}
+
+export enum LeaveStatus {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
+export interface Break {
+  id: string;
+  startTime: string;
+  endTime: string | null;
+  duration: number | null;
+  type: BreakType;
+  createdAt: string;
+  attendanceId: string;
+}
+
+export interface Attendance {
+  id: string;
+  clockInTime: string;
+  clockOutTime: string | null;
+  totalHours: number | null;
+  status: AttendanceStatus;
+  location: string | null;
+  notes: string | null;
+  isLate: boolean;
+  lateMinutes: number;
+  overtimeHours: number;
+  createdAt: string;
+  updatedAt: string;
+  employeeId: string;
+  branchId: string | null;
+  organizationId: string;
+  employee?: User;
+  branch?: Branch;
+  breaks?: Break[];
+}
+
+export interface AttendanceSettings {
+  id: string;
+  workStartTime: number; // minutes from midnight
+  workEndTime: number;
+  gracePeriodMinutes: number;
+  overtimeThreshold: number;
+  requireLocation: boolean;
+  autoClockOutHours: number;
+  createdAt: string;
+  updatedAt: string;
+  organizationId: string;
+}
+
+export interface LeaveRequest {
+  id: string;
+  startDate: string;
+  endDate: string;
+  type: LeaveType;
+  status: LeaveStatus;
+  reason: string;
+  notes: string | null;
+  approvedById: string | null;
+  approvedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+  employeeId: string;
+  organizationId: string;
+  employee?: User;
+  approver?: User;
+}
+
+export interface AttendanceSummary {
+  totalHours: number;
+  averageHoursPerDay: number;
+  totalLateArrivals: number;
+  lateArrivals: number; // Added for consistency
+  totalOvertimeHours: number;
+  overtimeHours: number; // Added for consistency
+  attendanceRate: number;
+  totalDays: number;
+  uniqueEmployees: number; // Added for employee count
+}
+
+export interface AttendanceByEmployee {
+  employeeId: string;
+  employeeName: string;
+  totalHours: number;
+  overtimeHours: number;
+  lateCount: number;
+  attendanceCount: number;
+}
+
+// Report-related interfaces
+export interface SalesReportData {
+  totalSales: number;
+  totalRevenue: number;
+  averageOrderValue: number;
+  totalTax: number;
+  totalDiscount: number;
+  salesByPaymentMethod: Array<{
+    paymentMethod: string;
+    totalAmount: number;
+    count: number;
+  }>;
+  salesByService: Array<{
+    serviceId: string;
+    serviceName: string;
+    totalQuantity: number;
+    totalRevenue: number;
+    count: number;
+  }>;
+  salesByStaff: Array<{
+    staffId: string;
+    staffName: string;
+    totalRevenue: number;
+    count: number;
+  }>;
+}
+
+export interface InventoryReportData {
+  totalItems: number;
+  totalValue: number;
+  lowStockCount: number;
+  turnoverRate: number;
+  itemsByCategory: Array<{
+    categoryName: string;
+    itemCount: number;
+    totalValue: number;
+  }>;
+  itemsBySupplier: Array<{
+    supplierName: string;
+    itemCount: number;
+    totalValue: number;
+  }>;
+  lowStockItems: Array<{
+    id: string;
+    name: string;
+    currentStock: number;
+    reorderLevel: number;
+    unitPrice: number;
+  }>;
+}
+
+export interface CustomerReportData {
+  totalCustomers: number;
+  newCustomers: number;
+  returningCustomers: number;
+  averageCustomerValue: number;
+  topCustomers: Array<{
+    id: string;
+    name: string;
+    email: string;
+    totalSpend: number;
+    totalVisits: number;
+    lastVisit: string | null;
+  }>;
+}
+
+export interface AppointmentReportData {
+  totalAppointments: number;
+  confirmedCount: number;
+  cancelledCount: number;
+  completedCount: number;
+  noShowCount: number;
+  cancellationRate: number;
+  statusBreakdown: Array<{
+    status: string;
+    count: number;
+  }>;
+  artistUtilization: Array<{
+    artistId: string;
+    artistName: string;
+    totalAppointments: number;
+  }>;
+}
+
+export interface StaffPerformanceData {
+  totalStaff: number;
+  topPerformer: string;
+  totalCommissions: number;
+  averageProductivity: number;
+  staffPerformance: Array<{
+    staffId: string;
+    staffName: string;
+    role: string;
+    totalSales: number;
+    totalCommissions: number;
+    appointmentsCompleted: number;
+    totalAppointments: number;
+    attendanceDays: number;
+    totalHours: number;
+  }>;
+}
+
+export interface PayrollReportData {
+  totalGrossPay: number;
+  totalDeductions: number;
+  totalNetPay: number;
+  averageSalary: number;
+  payrollCount: number;
+  payrollByStaff: Array<{
+    staffId: string;
+    staffName: string;
+    payPeriodStart: string;
+    grossPay: number;
+    totalDeductions: number;
+    netPay: number;
+  }>;
+}
+
+export interface ExpenseReportData {
+  totalExpenses: number;
+  averageExpense: number;
+  expenseCount: number;
+  topExpenseCategory: string;
+  expensesByCategory: Array<{
+    categoryName: string;
+    count: number;
+    totalAmount: number;
+  }>;
+  expensesByVendor: Array<{
+    vendorName: string;
+    count: number;
+    totalAmount: number;
+  }>;
+}
+
+export interface TimeSeriesData {
+  date: string;
+  totalSales: number;
+  totalRevenue: number;
+}

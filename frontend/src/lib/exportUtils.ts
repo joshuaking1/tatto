@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
+import * as XLSX from 'xlsx'
 import type { FinancialReportData } from '../services/dashboardService'
 
 /**
@@ -292,4 +293,146 @@ export function exportFinancialReportToCSV(reportData: FinancialReportData, file
   ]
   
   exportToCSV(csvData, filename)
+}
+
+/**
+ * Export data to Excel format (.xlsx)
+ */
+export function exportToExcel(data: any[], filename: string, sheetName = 'Sheet1') {
+  // Create a new workbook
+  const wb = XLSX.utils.book_new()
+  
+  // Convert data to worksheet
+  const ws = XLSX.utils.json_to_sheet(data)
+  
+  // Apply basic styling to headers
+  const range = XLSX.utils.decode_range(ws['!ref'] || 'A1')
+  for (let col = range.s.c; col <= range.e.c; col++) {
+    const cellAddress = XLSX.utils.encode_cell({ r: 0, c: col })
+    if (ws[cellAddress]) {
+      ws[cellAddress].s = {
+        font: { bold: true },
+        fill: { fgColor: { rgb: 'FFE6B6' } }
+      }
+    }
+  }
+  
+  // Auto-size columns
+  const colWidths = []
+  for (let col = range.s.c; col <= range.e.c; col++) {
+    let maxLength = 0
+    for (let row = range.s.r; row <= range.e.r; row++) {
+      const cellAddress = XLSX.utils.encode_cell({ r: row, c: col })
+      const cell = ws[cellAddress]
+      if (cell && cell.v) {
+        const cellValue = String(cell.v)
+        maxLength = Math.max(maxLength, cellValue.length)
+      }
+    }
+    colWidths.push({ wch: Math.min(maxLength + 2, 50) }) // Max width 50
+  }
+  ws['!cols'] = colWidths
+  
+  // Add worksheet to workbook
+  XLSX.utils.book_append_sheet(wb, ws, sheetName)
+  
+  // Generate and download the file
+  XLSX.writeFile(wb, `${filename}.xlsx`)
+}
+
+/**
+ * Enhanced CSV export that handles nested objects and arrays
+ */
+export function exportToCSVEnhanced(data: any[], filename: string) {
+  // Flatten nested objects
+  const flattenedData = data.map(item => {
+    const flattened: any = {}
+    
+    const flatten = (obj: any, prefix = '') => {
+      for (const key in obj) {
+        if (obj.hasOwnProperty(key)) {
+          const value = obj[key]
+          const newKey = prefix ? `${prefix}.${key}` : key
+          
+          if (value && typeof value === 'object' && !Array.isArray(value)) {
+            flatten(value, newKey)
+          } else if (Array.isArray(value)) {
+            flattened[newKey] = value.join(', ')
+          } else {
+            flattened[newKey] = value
+          }
+        }
+      }
+    }
+    
+    flatten(item)
+    return flattened
+  })
+  
+  exportToCSV(flattenedData, filename)
+}
+
+/**
+ * Export multi-section report to PDF
+ */
+export function exportReportToPDF(reportData: {
+  title: string
+  dateRange: string
+  sections: Array<{
+    title: string
+    data: any[]
+    headers: string[]
+  }>
+}, filename: string) {
+  const doc = new jsPDF()
+  
+  // Add title
+  doc.setFontSize(20)
+  doc.text(reportData.title, 20, 20)
+  
+  // Add date range
+  doc.setFontSize(12)
+  doc.text(`Period: ${reportData.dateRange}`, 20, 30)
+  
+  let yPosition = 50
+  
+  reportData.sections.forEach((section, index) => {
+    // Check if we need a new page
+    if (yPosition > 250) {
+      doc.addPage()
+      yPosition = 20
+    }
+    
+    // Add section title
+    doc.setFontSize(16)
+    doc.text(section.title, 20, yPosition)
+    yPosition += 15
+    
+    // Add table
+    if (section.data.length > 0) {
+      autoTable(doc, {
+        head: [section.headers],
+        body: section.data.map(row => 
+          section.headers.map(header => 
+            String(row[header] || '')
+          )
+        ),
+        startY: yPosition,
+        theme: 'grid',
+        styles: { fontSize: 10 },
+        headStyles: { fillColor: [66, 139, 202] },
+      })
+      
+      yPosition = (doc as any).lastAutoTable.finalY + 20
+    } else {
+      doc.setFontSize(10)
+      doc.text('No data available', 20, yPosition)
+      yPosition += 20
+    }
+    
+    yPosition += 10
+  })
+  
+  // Save the PDF
+  doc.save(`${filename}.pdf`)
 }
