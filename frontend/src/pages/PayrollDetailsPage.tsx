@@ -1,14 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, DollarSign } from 'lucide-react';
+import { ArrowLeft, DollarSign, Printer } from 'lucide-react';
 import { getPayrollById } from '@/services/payrollService';
 import { usePermissions } from '@/hooks/usePermissions';
-import { type Payroll, PayrollStatus } from '@/types';
+import { PayrollStatus } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { format } from 'date-fns';
+import { printPayslipById } from '@/lib/printUtils';
 
 export function PayrollDetailsPage() {
     const { id } = useParams<{ id: string }>();
@@ -50,6 +51,8 @@ export function PayrollDetailsPage() {
         const currency = payroll.payslips[0]?.currency || 'USD';
         return { amount: total, currency };
     };
+
+    const totalNetPay = calculateTotalNetPay();
 
     if (!canAccessResource('payroll:view')) {
         return (
@@ -158,6 +161,7 @@ export function PayrollDetailsPage() {
                                         <TableHead className="text-right">Bonuses</TableHead>
                                         <TableHead className="text-right">Deductions</TableHead>
                                         <TableHead className="text-right">Net Pay</TableHead>
+                                        <TableHead className="text-center">Actions</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -184,15 +188,27 @@ export function PayrollDetailsPage() {
                                             <TableCell className="text-right font-bold">
                                                 {formatCurrency(payslip.netPay || 0, payslip.currency || 'USD')}
                                             </TableCell>
+                                            <TableCell className="text-center">
+                                                <Button
+                                                    variant="outline"
+                                                    size="sm"
+                                                    onClick={() => printPayslipById(payslip.id)}
+                                                    className="flex items-center gap-2"
+                                                >
+                                                    <Printer className="h-4 w-4" />
+                                                    Print Payslip
+                                                </Button>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                     <TableRow className="font-bold bg-gray-50">
-                                        <TableCell colSpan={5} className="text-right">
+                                        <TableCell colSpan={6} className="text-right">
                                             Total Net Pay:
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            {formatCurrency(calculateTotalNetPay().amount, calculateTotalNetPay().currency)}
+                                            {formatCurrency(totalNetPay.amount, totalNetPay.currency)}
                                         </TableCell>
+                                        <TableCell></TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

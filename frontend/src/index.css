@@ -118,3 +118,62 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Print optimization styles for receipt printing */
+@media print {
+  /* Hide everything by default */
+  body * {
+    visibility: hidden;
+  }
+  
+  /* Show only print-content elements and their children */
+  .print-content, .print-content * {
+    visibility: visible;
+  }
+  
+  /* Position the receipt at the top */
+  .print-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Force black text and white backgrounds only within print-content */
+  .print-content * {
+    color: black !important;
+    background: white !important;
+  }
+  
+  /* Remove decorations that don't print well only within print-content */
+  .print-content * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+  
+  /* Page settings */
+  @page {
+    margin: 0.5cm;
+    size: auto;
+  }
+  
+  /* Prevent tables from breaking across pages */
+  .print-content table {
+    page-break-inside: avoid;
+  }
+  
+  /* Optimize font sizes for print */
+  .print-content {
+    font-size: 10pt;
+    line-height: 1.2;
+  }
+  
+  /* Ensure borders print properly */
+  .print-content .border-black, .print-content .border-t, .print-content .border-b {
+    border-color: black !important;
+    border-style: solid !important;
+    border-width: 1px !important;
+  }
+}

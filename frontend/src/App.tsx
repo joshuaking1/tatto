@@ -18,6 +18,9 @@ import { SalesHistoryPage } from './pages/SalesHistoryPage';
 import { PayrollPage } from './pages/PayrollPage';
 import { PayrollDetailsPage } from './pages/PayrollDetailsPage';
 import { CommissionRulesPage } from './pages/CommissionRulesPage';
+import { ExpensesPage } from './pages/ExpensesPage';
+import { ExpenseCategoriesPage } from './pages/ExpenseCategoriesPage';
+import { FinancialReportsPage } from './pages/FinancialReportsPage';
 import { RoleGuard } from '@/components/auth/RoleGuard';
 import { UserRole } from '@/types';
 import { Toaster } from '@/components/ui/sonner'; // Import the Toaster
@@ -92,6 +95,21 @@ function App() {
           <Route path="/commission-rules" element={
             <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN]}>
               <CommissionRulesPage />
+            </RoleGuard>
+          } />
+          <Route path="/expenses" element={
+            <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]}>
+              <ExpensesPage />
+            </RoleGuard>
+          } />
+          <Route path="/expenses/categories" element={
+            <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]}>
+              <ExpenseCategoriesPage />
+            </RoleGuard>
+          } />
+          <Route path="/reports/financial" element={
+            <RoleGuard allowedRoles={[UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]}>
+              <FinancialReportsPage />
             </RoleGuard>
           } />
         </Route>

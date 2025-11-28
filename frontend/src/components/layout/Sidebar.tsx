@@ -1,13 +1,16 @@
 // src/components/layout/Sidebar.tsx
 import { Link, useLocation } from "react-router-dom";
-import { Calendar, Home, Users, UserCircle, Scissors, CalendarClock, Package, ShoppingCart, Receipt, Building2, Wallet, TrendingUp } from "lucide-react";
+import { Calendar, Home, Users, UserCircle, Scissors, CalendarClock, Package, ShoppingCart, Receipt, Building2, Wallet, TrendingUp, CreditCard, FileBarChart, ChevronDown, Tags } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePermissions } from "@/hooks/usePermissions";
 import { UserRole } from "@/types";
+import { useState } from "react";
 
 export function Sidebar() {
   const location = useLocation();
-  const { hasAnyRole } = usePermissions();
+  const { hasAnyRole, canAccessResource } = usePermissions();
+  const [expensesExpanded, setExpensesExpanded] = useState(false);
+  const [inventoryExpanded, setInventoryExpanded] = useState(false);
 
   const isActive = (path: string) => location.pathname === path || location.pathname.startsWith(path + '/');
 
@@ -21,6 +24,8 @@ export function Sidebar() {
   const canViewBranches = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]);
   const canViewPayroll = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]);
   const canViewCommissionRules = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN]);
+  const canViewExpenses = hasAnyRole([UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER]);
+  const canViewFinancialReports = canAccessResource('reports:view');
 
   return (
     <div className="hidden border-r bg-muted/40 md:block">
@@ -109,16 +114,56 @@ export function Sidebar() {
               </Link>
             )}
             {canViewInventory && (
-              <Link
-                to="/inventory"
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
-                  isActive('/inventory') && "bg-muted text-primary"
+              <div>
+                <button
+                  onClick={() => setInventoryExpanded(!inventoryExpanded)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",
+                    (isActive('/inventory') || isActive('/inventory/categories') || isActive('/inventory/suppliers')) && "bg-muted text-primary"
+                  )}
+                >
+                  <Package className="h-4 w-4" />
+                  Inventory
+                  <ChevronDown className={cn(
+                    "h-4 w-4 ml-auto transition-transform",
+                    inventoryExpanded && "rotate-180"
+                  )} />
+                </button>
+                {inventoryExpanded && (
+                  <div className="ml-6 mt-1 space-y-1">
+                    <Link
+                      to="/inventory"
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        isActive('/inventory') && !isActive('/inventory/categories') && !isActive('/inventory/suppliers') && "bg-muted text-primary"
+                      )}
+                    >
+                      <Package className="h-4 w-4" />
+                      All Items
+                    </Link>
+                    <Link
+                      to="/inventory/categories"
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        isActive('/inventory/categories') && "bg-muted text-primary"
+                      )}
+                    >
+                      <Tags className="h-4 w-4" />
+                      Categories
+                    </Link>
+                    <Link
+                      to="/inventory/suppliers"
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        isActive('/inventory/suppliers') && "bg-muted text-primary"
+                      )}
+                    >
+                      <Building2 className="h-4 w-4" />
+                      Suppliers
+                    </Link>
+                  </div>
                 )}
-              >
-                <Package className="h-4 w-4" />
-                Inventory
-              </Link>
+              </div>
             )}
             {canViewPOS && (
               <Link
@@ -154,6 +199,60 @@ export function Sidebar() {
               >
                 <Wallet className="h-4 w-4" />
                 Payroll
+              </Link>
+            )}
+            {canViewExpenses && (
+              <div>
+                <button
+                  onClick={() => setExpensesExpanded(!expensesExpanded)}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary w-full",
+                    (isActive('/expenses') || isActive('/expenses/categories')) && "bg-muted text-primary"
+                  )}
+                >
+                  <CreditCard className="h-4 w-4" />
+                  Expenses
+                  <ChevronDown className={cn(
+                    "h-4 w-4 ml-auto transition-transform",
+                    expensesExpanded && "rotate-180"
+                  )} />
+                </button>
+                {expensesExpanded && (
+                  <div className="ml-6 mt-1 space-y-1">
+                    <Link
+                      to="/expenses"
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        isActive('/expenses') && !isActive('/expenses/categories') && "bg-muted text-primary"
+                      )}
+                    >
+                      <CreditCard className="h-4 w-4" />
+                      All Expenses
+                    </Link>
+                    <Link
+                      to="/expenses/categories"
+                      className={cn(
+                        "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                        isActive('/expenses/categories') && "bg-muted text-primary"
+                      )}
+                    >
+                      <Tags className="h-4 w-4" />
+                      Categories
+                    </Link>
+                  </div>
+                )}
+              </div>
+            )}
+            {canViewFinancialReports && (
+              <Link
+                to="/reports/financial"
+                className={cn(
+                  "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary",
+                  isActive('/reports/financial') && "bg-muted text-primary"
+                )}
+              >
+                <FileBarChart className="h-4 w-4" />
+                Financial Reports
               </Link>
             )}
             {canViewCommissionRules && (

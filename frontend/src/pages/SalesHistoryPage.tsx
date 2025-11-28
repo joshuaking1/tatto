@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { toast } from 'sonner';
 import {
   Receipt,
   Search,
@@ -35,6 +34,7 @@ import { getAllSales } from '@/services/salesService';
 import { usePermissions } from '@/hooks/usePermissions';
 import { type Sale, PaymentMethod } from '@/types';
 import { SaleDetailsDialog } from '@/components/sales/SaleDetailsDialog';
+import { printReceipt } from '@/lib/printUtils';
 
 export function SalesHistoryPage() {
   const { canAccessResource } = usePermissions();
@@ -85,8 +85,7 @@ export function SalesHistoryPage() {
   };
 
   const handlePrintReceipt = (sale: Sale) => {
-    // Placeholder for future receipt printing functionality
-    toast.info('Receipt printing not yet implemented');
+    printReceipt(sale);
   };
 
   const getPaymentBadges = (payments: any[]) => {

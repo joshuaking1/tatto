@@ -1,4 +1,4 @@
-export const enum UserRole {
+export enum UserRole {
     SUPER_ADMIN = 'SUPER_ADMIN',
     ADMIN = 'ADMIN',
     MANAGER = 'MANAGER',
@@ -8,7 +8,7 @@ export const enum UserRole {
     CUSTOMER = 'CUSTOMER',
 }
 
-export const enum AppointmentStatus {
+export enum AppointmentStatus {
     PENDING = 'PENDING',
     CONFIRMED = 'CONFIRMED',
     CANCELLED = 'CANCELLED',
@@ -16,14 +16,14 @@ export const enum AppointmentStatus {
     NO_SHOW = 'NO_SHOW',
 }
 
-export const enum PaymentMethod {
+export enum PaymentMethod {
     CASH = 'CASH',
     CARD = 'CARD',
     MOBILE_MONEY = 'MOBILE_MONEY',
     BANK_TRANSFER = 'BANK_TRANSFER',
 }
 
-export const enum PurchaseOrderStatus {
+export enum PurchaseOrderStatus {
     PENDING = 'PENDING',
     ORDERED = 'ORDERED',
     SHIPPED = 'SHIPPED',
@@ -31,12 +31,12 @@ export const enum PurchaseOrderStatus {
     CANCELLED = 'CANCELLED',
 }
 
-export const enum SalaryType {
+export enum SalaryType {
     MONTHLY = 'MONTHLY',
     HOURLY = 'HOURLY',
 }
 
-export const enum PayrollStatus {
+export enum PayrollStatus {
     PENDING = 'PENDING',
     PROCESSING = 'PROCESSING',
     COMPLETED = 'COMPLETED',
@@ -299,6 +299,7 @@ export interface Payroll {
     branchId: string;
     organizationId: string;
     payslips?: Payslip[];
+    branch?: Branch;
 }
 
 export interface Payslip {
@@ -347,4 +348,35 @@ export interface StaffDetail extends User {
 export interface CustomerDetail extends User {
     customerAppointments?: Appointment[];
     customerSales?: Sale[];
+}
+
+// Expense Management Types
+export interface ExpenseCategory {
+  id: string;
+  name: string;
+  description: string | null;
+  organizationId: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Expense {
+  id: string;
+  amount: number;
+  date: string;
+  description: string;
+  vendor: string | null;
+  receiptUrl: string | null;
+  paymentMethod: PaymentMethod;
+  notes: string | null;
+  organizationId: string;
+  branchId: string | null;
+  categoryId: string;
+  recordedById: string;
+  createdAt: string;
+  updatedAt: string;
+  // Optional relations
+  category?: ExpenseCategory;
+  branch?: Branch;
+  recordedBy?: User;
 }

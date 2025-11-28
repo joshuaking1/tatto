@@ -64,3 +64,104 @@ export const getTopServices = async (accessToken: string): Promise<TopServicesDa
     });
     return topServicesSchema.parse(data);
 };
+
+// Schema for Total Expenses
+const totalExpensesSchema = z.object({
+    total: z.number(),
+});
+export type TotalExpensesData = z.infer<typeof totalExpensesSchema>;
+
+export const getTotalExpenses = async (accessToken: string): Promise<TotalExpensesData> => {
+    const { data } = await apiClient.get('/dashboard/total-expenses', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    return totalExpensesSchema.parse(data);
+};
+
+// Schema for Expenses By Category
+const expensesByCategorySchema = z.array(z.object({
+    categoryId: z.string(),
+    categoryName: z.string(),
+    amount: z.number(),
+}));
+export type ExpensesByCategoryData = z.infer<typeof expensesByCategorySchema>;
+
+export const getExpensesByCategory = async (accessToken: string): Promise<ExpensesByCategoryData> => {
+    const { data } = await apiClient.get('/dashboard/expenses-by-category', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    return expensesByCategorySchema.parse(data);
+};
+
+// Schema for Profit/Loss
+const profitLossSchema = z.object({
+    totalRevenue: z.number(),
+    totalExpenses: z.number(),
+    totalPayroll: z.number(),
+    netProfit: z.number(),
+    period: z.string(),
+});
+export type ProfitLossData = z.infer<typeof profitLossSchema>;
+
+export const getProfitLoss = async (accessToken: string): Promise<ProfitLossData> => {
+    const { data } = await apiClient.get('/dashboard/profit-loss', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    return profitLossSchema.parse(data);
+};
+
+// Schema for Financial Report
+const financialReportSchema = z.object({
+    summary: z.object({
+        totalRevenue: z.number(),
+        totalExpenses: z.number(),
+        totalPayroll: z.number(),
+        netProfit: z.number(),
+        period: z.object({
+            start: z.string(),
+            end: z.string(),
+        }),
+    }),
+    revenueOverTime: z.array(z.object({
+        date: z.string(),
+        amount: z.number(),
+    })),
+    expensesOverTime: z.array(z.object({
+        date: z.string(),
+        amount: z.number(),
+    })),
+    expensesByCategory: z.array(z.object({
+        categoryId: z.string(),
+        categoryName: z.string(),
+        amount: z.number(),
+    })),
+    comparisons: z.object({
+        monthOverMonth: z.object({
+            revenue: z.number(),
+            expenses: z.number(),
+            payroll: z.number(),
+            profit: z.number(),
+        }),
+        yearOverYear: z.object({
+            revenue: z.number(),
+            expenses: z.number(),
+            payroll: z.number(),
+            profit: z.number(),
+        }),
+    }),
+});
+
+export type FinancialReportData = z.infer<typeof financialReportSchema>;
+
+export const getFinancialReport = async (
+    accessToken: string,
+    startDate: string,
+    endDate: string,
+    branchId?: string
+): Promise<FinancialReportData> => {
+    const { data } = await apiClient.get('/dashboard/financial-report', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: { startDate, endDate, branchId },
+    });
+    return financialReportSchema.parse(data);
+};

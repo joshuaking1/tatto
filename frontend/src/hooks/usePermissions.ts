@@ -30,6 +30,10 @@ const PERMISSION_MAP: ResourcePermissionMap = {
     'payroll:view': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
     'payroll:create': [UserRole.SUPER_ADMIN, UserRole.ADMIN],
     'reports:view': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'expense:view': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'expense:create': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'expense:edit': [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.MANAGER],
+    'expense:delete': [UserRole.SUPER_ADMIN, UserRole.ADMIN],
 };
 
 export function usePermissions() {

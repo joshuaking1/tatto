@@ -33,6 +33,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { getSaleById } from '@/services/salesService';
 import { PaymentMethod, type Sale } from '@/types';
+import { printReceipt } from '@/lib/printUtils';
 
 interface SaleDetailsDialogProps {
   open: boolean;
@@ -70,8 +71,9 @@ export function SaleDetailsDialog({ open, onOpenChange, saleId }: SaleDetailsDia
   };
 
   const handlePrintReceipt = () => {
-    // Placeholder for future receipt printing functionality
-    console.log('Print receipt for sale:', saleId);
+    if (sale) {
+      printReceipt(sale);
+    }
   };
 
   return (
