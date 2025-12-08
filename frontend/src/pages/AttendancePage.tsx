@@ -348,7 +348,7 @@ export const AttendancePage: React.FC = () => {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             <DateRangePicker value={dateRange} onChange={(range) => setDateRange(range)} />
             <Select value={employeeFilter} onValueChange={setEmployeeFilter}>
               <SelectTrigger>
@@ -388,28 +388,29 @@ export const AttendancePage: React.FC = () => {
               <Users className="h-5 w-5" />
               Attendance History
             </span>
-            <Button variant="outline">
+            <Button variant="outline" className="flex-col sm:flex-row">
               <BarChart3 className="h-4 w-4 mr-2" />
               View Reports
             </Button>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Employee</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Clock In</TableHead>
-                <TableHead>Clock Out</TableHead>
-                <TableHead>Total Hours</TableHead>
-                <TableHead>Breaks</TableHead>
-                <TableHead>Late</TableHead>
-                <TableHead>Overtime</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
+          <div className="overflow-x-auto">
+            <Table className="min-w-[1000px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Employee</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Clock In</TableHead>
+                  <TableHead>Clock Out</TableHead>
+                  <TableHead>Total Hours</TableHead>
+                  <TableHead>Breaks</TableHead>
+                  <TableHead>Late</TableHead>
+                  <TableHead>Overtime</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
             <TableBody>
               {filteredAttendances.map((attendance) => (
                 <TableRow key={attendance.id}>
@@ -493,6 +494,7 @@ export const AttendancePage: React.FC = () => {
               ))}
             </TableBody>
           </Table>
+          </div>
         </CardContent>
       </Card>
 

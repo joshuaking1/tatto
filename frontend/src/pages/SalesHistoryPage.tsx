@@ -123,7 +123,7 @@ export function SalesHistoryPage() {
   return (
     <div className="container mx-auto py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">Sales History</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Sales History</h1>
         <p className="text-gray-600">View and manage all sales transactions</p>
       </div>
 
@@ -136,7 +136,7 @@ export function SalesHistoryPage() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div>
               <label className="text-sm font-medium mb-2 block">Start Date</label>
               <DatePicker
@@ -199,96 +199,98 @@ export function SalesHistoryPage() {
               </p>
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date/Time</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Items</TableHead>
-                  <TableHead>Subtotal</TableHead>
-                  <TableHead>Discount</TableHead>
-                  <TableHead>Tax</TableHead>
-                  <TableHead>Total</TableHead>
-                  <TableHead>Payments</TableHead>
-                  <TableHead>Processed By</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredSales.map((sale) => (
-                  <TableRow
-                    key={sale.id}
-                    className="cursor-pointer hover:bg-gray-50"
-                    onClick={() => handleViewDetails(sale.id)}
-                  >
-                    <TableCell>
-                      <div>
-                        <div>{format(new Date(sale.createdAt), 'MMM dd, yyyy')}</div>
-                        <div className="text-sm text-gray-500">
-                          {format(new Date(sale.createdAt), 'HH:mm')}
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      {sale.customer ? (
-                        <div>
-                          <div className="font-medium">
-                            {sale.customer.firstName} {sale.customer.lastName}
-                          </div>
-                          <div className="text-sm text-gray-500">{sale.customer.email}</div>
-                        </div>
-                      ) : (
-                        <span className="text-gray-500">No customer</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary">
-                        {sale.items?.length || 0} items
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{formatCurrency(sale.subtotal)}</TableCell>
-                    <TableCell className="text-red-600">
-                      {sale.discountAmount > 0 ? `-${formatCurrency(sale.discountAmount)}` : '-'}
-                    </TableCell>
-                    <TableCell>{formatCurrency(sale.taxAmount)}</TableCell>
-                    <TableCell className="font-medium">
-                      {formatCurrency(sale.total)}
-                    </TableCell>
-                    <TableCell>
-                      {getPaymentBadges(sale.payments || [])}
-                    </TableCell>
-                    <TableCell>
-                      {sale.processedBy ? (
-                        <div className="text-sm">
-                          {sale.processedBy.firstName} {sale.processedBy.lastName}
-                        </div>
-                      ) : (
-                        <span className="text-gray-500">Unknown</span>
-                      )}
-                    </TableCell>
-                    <TableCell onClick={(e) => e.stopPropagation()}>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="sm">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => handleViewDetails(sale.id)}>
-                            <Eye className="h-4 w-4 mr-2" />
-                            View Details
-                          </DropdownMenuItem>
-                          <DropdownMenuItem onClick={() => handlePrintReceipt(sale)}>
-                            <Printer className="h-4 w-4 mr-2" />
-                            Print Receipt
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table className="min-w-[1000px]">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Date/Time</TableHead>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Items</TableHead>
+                    <TableHead>Subtotal</TableHead>
+                    <TableHead>Discount</TableHead>
+                    <TableHead>Tax</TableHead>
+                    <TableHead>Total</TableHead>
+                    <TableHead>Payments</TableHead>
+                    <TableHead>Processed By</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredSales.map((sale) => (
+                    <TableRow
+                      key={sale.id}
+                      className="cursor-pointer hover:bg-gray-50"
+                      onClick={() => handleViewDetails(sale.id)}
+                    >
+                      <TableCell>
+                        <div>
+                          <div>{format(new Date(sale.createdAt), 'MMM dd, yyyy')}</div>
+                          <div className="text-sm text-gray-500">
+                            {format(new Date(sale.createdAt), 'HH:mm')}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        {sale.customer ? (
+                          <div>
+                            <div className="font-medium">
+                              {sale.customer.firstName} {sale.customer.lastName}
+                            </div>
+                            <div className="text-sm text-gray-500">{sale.customer.email}</div>
+                          </div>
+                        ) : (
+                          <span className="text-gray-500">No customer</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">
+                          {sale.items?.length || 0} items
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{formatCurrency(sale.subtotal)}</TableCell>
+                      <TableCell className="text-red-600">
+                        {sale.discountAmount > 0 ? `-${formatCurrency(sale.discountAmount)}` : '-'}
+                      </TableCell>
+                      <TableCell>{formatCurrency(sale.taxAmount)}</TableCell>
+                      <TableCell className="font-medium">
+                        {formatCurrency(sale.total)}
+                      </TableCell>
+                      <TableCell>
+                        {getPaymentBadges(sale.payments || [])}
+                      </TableCell>
+                      <TableCell>
+                        {sale.processedBy ? (
+                          <div className="text-sm">
+                            {sale.processedBy.firstName} {sale.processedBy.lastName}
+                          </div>
+                        ) : (
+                          <span className="text-gray-500">Unknown</span>
+                        )}
+                      </TableCell>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="sm">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => handleViewDetails(sale.id)}>
+                              <Eye className="h-4 w-4 mr-2" />
+                              View Details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handlePrintReceipt(sale)}>
+                              <Printer className="h-4 w-4 mr-2" />
+                              Print Receipt
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>

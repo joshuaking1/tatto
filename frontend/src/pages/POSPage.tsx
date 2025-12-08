@@ -261,11 +261,11 @@ export function POSPage() {
     >
       <div className="container mx-auto py-8">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold">Point of Sale</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold">Point of Sale</h1>
         <p className="text-gray-600">{format(new Date(), 'PPP p')}</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6">
         {/* Left Column - Item Selection */}
         <div className="space-y-6">
           {/* Customer Selection */}
@@ -448,17 +448,18 @@ export function POSPage() {
                   <p>Your cart is empty</p>
                 </div>
               ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Item</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead>Qty</TableHead>
-                      <TableHead>Price</TableHead>
-                      <TableHead>Subtotal</TableHead>
-                      <TableHead></TableHead>
-                    </TableRow>
-                  </TableHeader>
+                <div className="overflow-x-auto">
+                  <Table className="min-w-[600px]">
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Item</TableHead>
+                        <TableHead>Type</TableHead>
+                        <TableHead>Qty</TableHead>
+                        <TableHead>Price</TableHead>
+                        <TableHead>Subtotal</TableHead>
+                        <TableHead></TableHead>
+                      </TableRow>
+                    </TableHeader>
                   <TableBody>
                     {cartItems.map((item, index) => (
                       <TableRow key={index}>
@@ -498,6 +499,7 @@ export function POSPage() {
                     ))}
                   </TableBody>
                 </Table>
+                </div>
               )}
             </CardContent>
           </Card>

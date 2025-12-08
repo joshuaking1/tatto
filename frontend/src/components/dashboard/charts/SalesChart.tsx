@@ -21,10 +21,10 @@ export function SalesChart() {
                 <CardTitle>Sales - Last 30 Days</CardTitle>
             </CardHeader>
             <CardContent className="pl-2">
-                <ResponsiveContainer width="100%" height={350}>
+                <ResponsiveContainer width="100%" height={300} className="h-[250px] sm:h-[300px] lg:h-[350px]">
                     <BarChart data={data}>
-                        <XAxis dataKey="date" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
-                        <YAxis stroke="#888888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `₵${value}`} />
+                        <XAxis dataKey="date" stroke="#888888" fontSize={10} tickLine={false} axisLine={false} />
+                        <YAxis stroke="#888888" fontSize={10} tickLine={false} axisLine={false} tickFormatter={(value) => `₵${value}`} />
                         <Bar dataKey="total" fill="#2563eb" radius={[4, 4, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>

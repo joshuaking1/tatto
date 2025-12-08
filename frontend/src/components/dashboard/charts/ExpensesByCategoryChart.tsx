@@ -21,10 +21,10 @@ export function ExpensesByCategoryChart() {
                 <CardTitle>Expenses by Category</CardTitle>
             </CardHeader>
             <CardContent>
-                <ResponsiveContainer width="100%" height={350}>
+                <ResponsiveContainer width="100%" height={300} className="h-[250px] sm:h-[300px] lg:h-[350px]">
                     <BarChart layout="vertical" data={data || []}>
                         <XAxis type="number" hide />
-                        <YAxis type="category" width={150} dataKey="categoryName" stroke="#888888" fontSize={12} />
+                        <YAxis type="category" width={150} dataKey="categoryName" stroke="#888888" fontSize={10} />
                         <Tooltip cursor={{ fill: 'transparent' }} />
                         <Bar dataKey="total" name="Total Amount" fill="#dc2626" radius={[0, 4, 4, 0]} />
                     </BarChart>

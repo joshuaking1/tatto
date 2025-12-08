@@ -248,23 +248,17 @@ export const ReportsPage: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">Advanced Reports</h1>
-          <p className="text-gray-500">Comprehensive analytics and insights for your tattoo shop</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Reports</h1>
+          <p className="text-muted-foreground">
+            Generate and view comprehensive business reports
+          </p>
         </div>
         <div className="flex gap-2">
-          <Button onClick={handleExportCSV} variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            CSV
-          </Button>
-          <Button onClick={handleExportPDF} variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            PDF
-          </Button>
-          <Button onClick={handleExportExcel} variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            Excel
+          <Button variant="outline" className="w-full sm:w-auto">
+            <Download className="mr-2 h-4 w-4" />
+            Export
           </Button>
         </div>
       </div>
@@ -281,7 +275,7 @@ export const ReportsPage: React.FC = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <DateRangePicker 
               value={dateRange} 
               onChange={(range) => setDateRange(range)} 
@@ -304,15 +298,15 @@ export const ReportsPage: React.FC = () => {
 
       {/* Report Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid w-full grid-cols-3 lg:grid-cols-8">
-          <TabsTrigger value="sales">Sales</TabsTrigger>
-          <TabsTrigger value="inventory">Inventory</TabsTrigger>
-          <TabsTrigger value="customers">Customers</TabsTrigger>
-          <TabsTrigger value="appointments">Appointments</TabsTrigger>
-          <TabsTrigger value="staff">Staff</TabsTrigger>
-          <TabsTrigger value="payroll">Payroll</TabsTrigger>
-          <TabsTrigger value="expenses">Expenses</TabsTrigger>
-          <TabsTrigger value="attendance">Attendance</TabsTrigger>
+        <TabsList className="flex overflow-x-auto w-full">
+          <TabsTrigger value="sales" className="whitespace-nowrap">Sales</TabsTrigger>
+          <TabsTrigger value="inventory" className="whitespace-nowrap">Inventory</TabsTrigger>
+          <TabsTrigger value="customers" className="whitespace-nowrap">Customers</TabsTrigger>
+          <TabsTrigger value="appointments" className="whitespace-nowrap">Appointments</TabsTrigger>
+          <TabsTrigger value="staff" className="whitespace-nowrap">Staff</TabsTrigger>
+          <TabsTrigger value="payroll" className="whitespace-nowrap">Payroll</TabsTrigger>
+          <TabsTrigger value="expenses" className="whitespace-nowrap">Expenses</TabsTrigger>
+          <TabsTrigger value="attendance" className="whitespace-nowrap">Attendance</TabsTrigger>
         </TabsList>
 
         <TabsContent value="sales" className="space-y-4">

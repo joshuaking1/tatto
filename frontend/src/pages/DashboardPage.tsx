@@ -40,7 +40,7 @@ const DashboardPage = () => {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6">Dashboard</h1>
       
       {isLoading ? (
         <div>Loading dashboard...</div>
@@ -48,7 +48,7 @@ const DashboardPage = () => {
         <div>Error fetching data: {error?.message || 'Unknown error'}</div>
       ) : (
         <>
-          <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
             <KpiCard title="Total Revenue" value={formatCurrency(kpiData?.totalRevenue || 0)} description={kpiData?.period} icon={DollarSign} />
             <KpiCard title="Sales" value={`+${kpiData?.totalSales || 0}`} description={kpiData?.period} icon={CreditCard} />
             <KpiCard title="New Customers" value={`+${kpiData?.newCustomers || 0}`} description={kpiData?.period} icon={Users} />
@@ -72,7 +72,7 @@ const DashboardPage = () => {
           </div>
 
           {/* --- ADD THE CHART GRID SECTION --- */}
-          <div className="grid gap-4 md:gap-8 lg:grid-cols-3 mt-8">
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-3 mt-8">
             <div>
                 <SalesChart />
             </div>
