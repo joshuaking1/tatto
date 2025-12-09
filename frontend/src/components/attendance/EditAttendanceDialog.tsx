@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not required with the automatic JSX runtime
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -93,7 +93,7 @@ export function EditAttendanceDialog({ open, onOpenChange, attendanceId, onSucce
       onSuccess();
       onOpenChange(false);
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Failed to update attendance');
     },
   });

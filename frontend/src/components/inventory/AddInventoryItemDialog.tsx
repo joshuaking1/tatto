@@ -60,12 +60,15 @@ interface AddInventoryItemDialogProps {
 export function AddInventoryItemDialog({ open, onOpenChange, onSuccess }: AddInventoryItemDialogProps) {
     const queryClient = useQueryClient();
 
-    const form = useForm<z.infer<typeof formSchema>>({
+    type FormValues = z.output<typeof formSchema>;
+    const form = useForm<FormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             name: '',
             sku: '',
             quantity: 0,
+            reorderLevel: undefined,
+            unitPrice: undefined,
             categoryId: '',
             supplierId: 'none',
         },
@@ -99,7 +102,7 @@ export function AddInventoryItemDialog({ open, onOpenChange, onSuccess }: AddInv
         },
     });
 
-    const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const onSubmit = (values: FormValues) => {
         const payload: CreateInventoryItemDto = {
             ...values,
             reorderLevel: values.reorderLevel,

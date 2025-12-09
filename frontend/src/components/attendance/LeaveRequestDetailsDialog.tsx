@@ -1,16 +1,7 @@
-import React from 'react';
+// React import not required with the automatic JSX runtime
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import {
-  Calendar,
-  User,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  FileText,
-  X,
-} from 'lucide-react';
+import { Calendar, Clock, CheckCircle, XCircle, AlertCircle, FileText, X } from 'lucide-react';
 
 import {
   Dialog,
@@ -23,7 +14,6 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { getLeaveRequestById } from '@/services/leaveRequestsService';
 import { LeaveType, LeaveStatus } from '@/types';
-import type { LeaveRequest } from '@/types';
 
 interface LeaveRequestDetailsDialogProps {
   open: boolean;

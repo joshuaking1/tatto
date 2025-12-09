@@ -51,7 +51,7 @@ const createAppointmentSchema = z.object({
     customerUserId: z.string().min(1, 'Customer is required'),
     serviceId: z.string().min(1, 'Service is required'),
     artistId: z.string().optional(),
-    date: z.date({ required_error: 'Date is required' }),
+    date: z.date(),
     time: z.string().min(1, 'Time is required'),
     notes: z.string().optional(),
 });

@@ -76,7 +76,7 @@ export function CreateLeaveRequestDialog({ open, onOpenChange, onSuccess }: Crea
       onOpenChange(false);
       form.reset();
     },
-    onError: (error) => {
+    onError: () => {
       toast.error('Failed to create leave request');
     },
   });

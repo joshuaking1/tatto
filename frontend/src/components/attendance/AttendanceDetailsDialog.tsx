@@ -1,4 +1,4 @@
-import React from 'react';
+// React import not required with the automatic JSX runtime
 import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import {
