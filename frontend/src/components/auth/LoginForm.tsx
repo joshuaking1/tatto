@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/utils";
 import { login } from "@/services/authService";
 import { useAuthStore } from "@/store/authStore";
 import { useMutation } from "@tanstack/react-query";
@@ -27,7 +28,7 @@ export function LoginForm() {
     },
     onError: (error) => {
       toast.error("Login Failed", {
-        description: error.response?.data?.message || "Invalid credentials. Please try again.",
+        description: getErrorMessage(error),
       });
     },
   });

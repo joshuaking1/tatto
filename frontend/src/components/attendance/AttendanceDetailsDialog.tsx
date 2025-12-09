@@ -1,13 +1,9 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { format, differenceInMinutes } from 'date-fns';
+import { format } from 'date-fns';
 import {
   Clock,
-  MapPin,
   Coffee,
-  User,
-  Calendar,
-  FileText,
   X,
 } from 'lucide-react';
 
@@ -33,7 +29,6 @@ import {
   AttendanceStatus, 
   BreakType 
 } from '@/types';
-import type { Attendance } from '@/types';
 
 interface AttendanceDetailsDialogProps {
   open: boolean;
