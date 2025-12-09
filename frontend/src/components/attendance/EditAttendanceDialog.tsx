@@ -1,4 +1,4 @@
-// React import not required with the automatic JSX runtime
+import * as React from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

@@ -62,7 +62,7 @@ export function AddInventoryItemDialog({ open, onOpenChange, onSuccess }: AddInv
 
     type FormValues = z.output<typeof formSchema>;
     const form = useForm<FormValues>({
-        resolver: zodResolver(formSchema),
+        resolver: zodResolver<FormValues>(formSchema),
         defaultValues: {
             name: '',
             sku: '',
